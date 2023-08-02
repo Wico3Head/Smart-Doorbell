@@ -1,16 +1,17 @@
 import cv2 as cv
 from gpiozero import Button
 import pyttsx3
-import pygame.mixer
+import pygame
 pygame.mixer.init()
 
-bell_sound = pygame.mixer.Sound("bell_sound.mp3")
+bell_sound = pygame.mixer.music.load("bell_sound.mp3")
 engine = pyttsx3.init()
 button = Button(18)
 
 def main():
     motion_detected = False
-    movement_history = [False for i in range(50)]
+    button_released = True
+    movement_history = [False for i in range(5)]
     mog = cv.createBackgroundSubtractorMOG2()
     cap = cv.VideoCapture(0)
 
@@ -40,8 +41,17 @@ def main():
         else:
             motion_detected = False
 
-        if not pygame.mixer.get_busy() and button.is_pressed:
-            pygame.mixer.play(bell_sound)
+        if button.is_pressed:
+            if button_released:
+                button_released = False
+                if not pygame.mixer.get_busy():
+                    pygame.mixer.music.play() 
+        elif not button_released:
+            button_released = True
+
+        cv.imshow("frame", frame)
+        if cv.waitKey(1) == ord("q"):
+            break
 
 if __name__ == "__main__":
     main()
