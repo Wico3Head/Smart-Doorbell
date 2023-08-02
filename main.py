@@ -11,7 +11,6 @@ button = Button(18)
 def main():
     motion_detected = False
     movement_history = [False for i in range(50)]
-    button_pressed = False
     mog = cv.createBackgroundSubtractorMOG2()
     cap = cv.VideoCapture(0)
 
