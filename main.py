@@ -49,9 +49,5 @@ def main():
         elif not button_released:
             button_released = True
 
-        cv.imshow("frame", frame)
-        if cv.waitKey(1) == ord("q"):
-            break
-
 if __name__ == "__main__":
     main()
